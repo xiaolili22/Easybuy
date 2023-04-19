@@ -14,10 +14,12 @@ function Home() {
     status: "Approved",
     category: [],
     condition: [],
+    search: "",
   });
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.users);
+
   const getData = async () => {
     try {
       dispatch(SetLoader(true));
@@ -35,6 +37,13 @@ function Home() {
   useEffect(() => {
     getData();
   }, [filters]);
+
+  const handleSearch = (event) => {
+    setFilters({
+      ...filters,
+      search: event.target.value,
+    });
+  };
 
   return (
     <div className="flex gap-5">
@@ -59,6 +68,8 @@ function Home() {
             type="text"
             placeholder="Search products here..."
             className="border border-gray-300 rounded border-solid p-2 h-14"
+            value={filters.search}
+            onChange={handleSearch}
           />
         </div>
 

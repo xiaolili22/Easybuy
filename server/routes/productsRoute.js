@@ -42,7 +42,7 @@ router.post("/add-product", authMiddleware, async (req, res) => {
 // get all products
 router.post("/get-products", async (req, res) => {
   try {
-    const { seller, category = [], condition = [], status } = req.body;
+    const { seller, category = [], condition = [], status, search } = req.body;
     let filters = {};
     if (seller) {
       filters.seller = seller;
@@ -58,6 +58,10 @@ router.post("/get-products", async (req, res) => {
     // filter by condition
     if (condition.length > 0) {
       filters.condition = { $in: condition };
+    }
+    // search by product name
+    if (search) {
+      filters.name = { $regex: new RegExp(search, "i") };
     }
 
     const products = await Product.find(filters)
